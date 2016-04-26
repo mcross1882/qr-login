@@ -59,7 +59,7 @@ server.route({
     path: '/generate/login',
     handler: function(request, reply) {
         var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
-        //var url = "http://192.168.1.70:8080/validate?nonce=" + nonce;
+        //var url = "http://192.168.1.102:8080/validate?nonce=" + nonce;
         var url = request.server.info.uri + "/validate?nonce=" + nonce;
         reply(createQRCode(url));
     },
@@ -76,7 +76,7 @@ server.route({
     path: '/generate/register/{username}',
     handler: function(request, reply) {
         var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
-        //var url = "http://192.168.1.70:8080/register?username=" + request.params.username + "&nonce=" + nonce;
+        //var url = "http://192.168.1.102:8080/register?username=" + request.params.username + "&nonce=" + nonce;
         var url = request.server.info.uri + "/register?username=" + request.params.username + "&nonce=" + nonce;
         reply(createQRCode(url));
     },
@@ -92,6 +92,11 @@ server.route({
     method: 'GET',
     path: '/validate',
     handler: function(request, reply) {
+        if (!request.state.user) {
+            reply("You must provide login credentials").code(400);
+            return;
+        }
+
         var user = JSON.parse(new Buffer(request.state.user).toString());
         validateUser(user.username, user.access_token, function(error, isApproved) {
             if (error) {
