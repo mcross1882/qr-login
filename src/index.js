@@ -45,21 +45,46 @@ server.connection({ port: 8080 });
 
 server.state('user', {
     ttl: 24 * 60 * 60 * 1000,
-    isSecure: true,
+    isSecure: false,
     isHttpOnly: true,
     strictHeader: true,
+    clearInvalid: true,
     encoding: 'iron',
     password: uuid.v4()
+    //domain: "localhost"
 });
 
 server.route({
     method: 'GET',
-    path: '/generate',
+    path: '/generate/validate',
     handler: function(request, reply) {
         var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
-        //var url = "http://192.168.1.70:8080?validate=" + nonce;
-        var url = request.server.info.uri + "?validate=" + nonce;
+        var url = "http://192.168.1.70:8080/validate?nonce=" + nonce;
+        //var url = request.server.info.uri + "/validate?nonce=" + nonce;
         reply(createQRCode(url));
+    },
+    config: {
+        state: {
+            parse: false,
+            failAction: 'ignore'
+        }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/generate/register/{username}',
+    handler: function(request, reply) {
+        var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
+        var url = "http://192.168.1.70:8080/register?username=" + request.params.username + "&nonce=" + nonce;
+        //var url = request.server.info.uri + "/register?nonce=" + nonce;
+        reply(createQRCode(url));
+    },
+    config: {
+        state: {
+            parse: false,
+            failAction: 'ignore'
+        }
     }
 });
 
@@ -75,7 +100,7 @@ server.route({
             }
 
             if ("OK" === isApproved.toString()) {
-                reply("OK");
+                reply("You are logged in!");
                 return;
             }
             reply("Not found").code(404);
@@ -98,13 +123,14 @@ server.route({
                 reply(error).code(400);
                 return;
             }
-            reply("You are logged in!").state('user', user);
+            reply("Device Synced!").state('user', user);
         });
     },
     config: {
         validate: {
             query: {
-                username: Joi.string()
+                username: Joi.string(),
+                nonce: Joi.string()
             }
         },
         state: {
