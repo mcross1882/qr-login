@@ -56,11 +56,11 @@ server.state('user', {
 
 server.route({
     method: 'GET',
-    path: '/generate/validate',
+    path: '/generate/login',
     handler: function(request, reply) {
         var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
-        var url = "http://192.168.1.70:8080/validate?nonce=" + nonce;
-        //var url = request.server.info.uri + "/validate?nonce=" + nonce;
+        //var url = "http://192.168.1.70:8080/validate?nonce=" + nonce;
+        var url = request.server.info.uri + "/validate?nonce=" + nonce;
         reply(createQRCode(url));
     },
     config: {
@@ -76,8 +76,8 @@ server.route({
     path: '/generate/register/{username}',
     handler: function(request, reply) {
         var nonce = new Buffer(uuid.v4() + ":" + (new Date()).getTime()).toString("base64");
-        var url = "http://192.168.1.70:8080/register?username=" + request.params.username + "&nonce=" + nonce;
-        //var url = request.server.info.uri + "/register?nonce=" + nonce;
+        //var url = "http://192.168.1.70:8080/register?username=" + request.params.username + "&nonce=" + nonce;
+        var url = request.server.info.uri + "/register?username=" + request.params.username + "&nonce=" + nonce;
         reply(createQRCode(url));
     },
     config: {

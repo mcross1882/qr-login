@@ -8,7 +8,13 @@ A simple microservice that can process stateless SQRL login requests.
 Generate a unique QR code for logging in
 
 ```
-GET /generate
+GET /generate/login
+```
+
+Generate a unique QR code for registering a device
+
+```
+GET /generate/register/{username}
 ```
 
 The redirected route that the QR code will point to
