@@ -1,0 +1,31 @@
+{
+  "name": "qr-login",
+  "version": "0.0.1",
+  "description": "QR Code account microservice",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcross1882/qr-login.git"
+  },
+  "keywords": [
+    "qr",
+    "login",
+    "account"
+  ],
+  "author": "Matthew Cross <blacklightgfx@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mcross1882/qr-login/issues"
+  },
+  "homepage": "https://github.com/mcross1882/qr-login#readme",
+  "dependencies": {
+    "hapi": "^13.3.0",
+    "iron": "^4.0.0",
+    "joi": "^8.0.5",
+    "qrcode-npm": "0.0.3",
+    "uuid": "^2.0.2"
+  }
+}
