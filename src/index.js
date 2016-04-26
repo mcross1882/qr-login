@@ -100,7 +100,7 @@ server.route({
             }
 
             if ("OK" === isApproved.toString()) {
-                reply("You are logged in!");
+                reply("You are logged in!").redirect(process.env.REDIRECT_URL);
                 return;
             }
             reply("Not found").code(404);
@@ -137,6 +137,15 @@ server.route({
             parse: true,
             failAction: 'error'
         }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/info',
+    handler: function(request, reply) {
+        var user = JSON.parse(new Buffer(request.state.user).toString());
+        reply(user)
     }
 });
 

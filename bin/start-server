@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+WIRELESS_IP=$(ifconfig wlp7s0 | grep 'inet ' | cut -d: -f2 | awk '{print $2}')
+
+ETHERNET_IP=$(ifconfig eth0 | grep 'inet ' | cut -d: -f2 | awk '{print $2}')
+
+IP_ADDRESS=$WIRELESS_IP
+
+forever start ../test/accountservice.js
+
+USER_REQUEST_URL=http://$IP_ADDRESS:8888/users USER_VALIDATE_URL=http://$IP_ADDRESS:8888/authenticate USER_REQUEST_TOKEN=SECRET REDIRECT_URL=http://$IP_ADDRESS:8080/info forever start ../src/index.js
+

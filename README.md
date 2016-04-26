@@ -11,7 +11,7 @@ Generate a unique QR code for logging in
 GET /generate/login
 ```
 
-Generate a unique QR code for registering a device
+Generate a unique QR code for registering a device. (This route should be hidden behind a permission gate)
 
 ```
 GET /generate/register/{username}
